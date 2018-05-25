@@ -37,9 +37,15 @@ function getConfig({name}) {
 
         mode: process.env.NODE_ENV,
 
+        // entry: [
+        //     'eventsource-polyfill',
+        //     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+        //     `./src/${name}/index.js`
+        // ],
+
         entry: [
-            'eventsource-polyfill',
-            'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+            'webpack-dev-server/client?http://0.0.0.0:3000',
+            'webpack/hot/dev-server',
             `./src/${name}/index.js`
         ],
 
@@ -103,7 +109,7 @@ function getConfig({name}) {
             }),
             new webpack.NamedModulesPlugin(),
             new webpack.NoEmitOnErrorsPlugin(),
-            new webpack.HotModuleReplacementPlugin()
+            new webpack.HotModuleReplacementPlugin(),
         ],
 
         optimization: {

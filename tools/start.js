@@ -20,7 +20,9 @@ async function server(dirName) {
     let complier = webpack(webpackConfig);
 
     const server = new webpackDevServer(complier, {
+        contentBase: '../dist',
         hot: true,
+        host: 'localhost',
         stats: { colors: true }
     }).listen(port, '0.0.0.0', function (err) {
         console.log("\n-------------\n");
