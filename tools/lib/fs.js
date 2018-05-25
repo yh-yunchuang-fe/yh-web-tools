@@ -2,8 +2,8 @@
  * @author zhangyi
  * @date 2018/5/24
  */
-import fs from 'fs';
-import mkdirp from 'mkdirp';
+const fs = require( 'fs');
+const mkdirp = require( 'mkdirp');
 
 const writeFile = (file, contents) => new Promise((resolve, reject) => {
     fs.writeFile(file, contents, 'utf8', err => err ? reject(err) : resolve());
@@ -21,4 +21,4 @@ const readJsonSync = file => {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
 };
 
-export default {writeFile, makeDir, readFile, readJsonSync};
+module.exports = { writeFile, makeDir, readFile, readJsonSync };
