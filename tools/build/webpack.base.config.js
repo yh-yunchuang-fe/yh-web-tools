@@ -4,19 +4,19 @@
  */
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 
-function getConfig({name}) {
+function getCommonConfig({ name }) {
+
     const htmlTemplate = `src/${name}/index.html`;
     const devMode = process.env.NODE_ENV !== 'production';
 
     const contextPath = path.join(__dirname, '../../src');
     const nodeModules = path.join(__dirname, '../../node_modules');
-    console.log('path.join(__dirname, \'../build/postcss.config.js\'):', path.join(__dirname, '../build/postcss.config.js'))
 
     let cssLoader = [
         { loader: devMode ? 'style-loader' : MiniCssExtractPlugin.loader },
@@ -34,25 +34,10 @@ function getConfig({name}) {
     const lessLoader = cssLoader.concat({ loader: 'less-loader'});
 
     return {
-
-        mode: process.env.NODE_ENV,
-
-        // entry: [
-        //     'eventsource-polyfill',
-        //     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-        //     `./src/${name}/index.js`
-        // ],
-
-        entry: [
-            'webpack-dev-server/client?http://0.0.0.0:3000',
-            'webpack/hot/dev-server',
-            `./src/${name}/index.js`
-        ],
-
         output: {
             path: path.join(__dirname, "../../dist"),
             publicPath: '/',
-            filename: `${name}/js/${name}_[name].js`
+            filename: `${name}/js/${name}_[name].[hash:6].js`
         },
 
         resolve: {
@@ -101,15 +86,13 @@ function getConfig({name}) {
         plugins: [
             new MiniCssExtractPlugin({
                 filename: `${name}/css/${name}_[name].[hash:4].css`,
-                chunkFilename: `${name}/css/${name}_[id].[hash].css`,
+                chunkFilename: `${name}/css/${name}_[id].[hash:4].css`,
             }),
             new HtmlWebpackPlugin({
                 filename: `${name}/index.html`,
                 template: htmlTemplate
             }),
-            new webpack.NamedModulesPlugin(),
-            new webpack.NoEmitOnErrorsPlugin(),
-            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin()
         ],
 
         optimization: {
@@ -119,10 +102,10 @@ function getConfig({name}) {
                     parallel: true,
                     sourceMap: true // set to true if you want JS source maps
                 }),
-                new OptimizeCSSAssetsPlugin({})
+                new OptimizeCSSAssetsPlugin()
             ]
         },
     }
 }
 
-module.exports = getConfig;
+module.exports = getCommonConfig;

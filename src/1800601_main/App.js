@@ -10,7 +10,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h1>Hello 2222
+                <h1>Hello
                     <span className="highLight"> {this.props.name}</span>
                 </h1>
             </div>

@@ -5,9 +5,8 @@
 const fs = require('fs-extra');
 const colors = require('colors');
 const pkg = require('../package.json');
-
 const webpack = require('webpack');
-const getConfig = require('./build/webpack.config');
+const getProdConfig = require('./build/webpack.prod.config');
 
 async function build(dirName) {
     dirName = dirName || process.argv[3];
@@ -28,10 +27,9 @@ async function build(dirName) {
     } else {
         fs.removeSync(`${distDir}/${dirName}`);
 
-        const webpackConfig = getConfig({name: dirName});
+        const webpackConfig = getProdConfig({name: dirName});
 
         webpack(webpackConfig, (err, stats) => {
-            // console.log('stats:', stats);
             if (err) {
                 console.log(err);
             }
