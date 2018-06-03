@@ -13,6 +13,10 @@ class App extends Component {
                 <h1>Hello
                     <span className="highLight"> {this.props.name}</span>
                 </h1>
+                <img src={require("./assets/imgs/alone.jpg")} alt="" className="img"/>
+                <div className="rem-demo">
+
+                </div>
             </div>
         )
     }

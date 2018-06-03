@@ -23,7 +23,7 @@ function getDevConfig({ name, port }) {
 
         plugins: [
             new webpack.NamedModulesPlugin(),
-            new webpack.HotModuleReplacementPlugin(),
+            new webpack.HotModuleReplacementPlugin()
         ]
     })
 }

@@ -7,35 +7,48 @@ const colors = require('colors');
 const pkg = require('../package.json');
 const webpack = require('webpack');
 const getProdConfig = require('./build/webpack.prod.config');
+const selectEnv = require('./lib/selectEnv');
 
-async function build(dirName) {
-    dirName = dirName || process.argv[3];
+async function build(dirName, env, isCDN) {
 
-    if (!dirName) {
-        console.error('-- source dir is empty! --');
-        return
-    }
-    process.env.NODE_ENV = 'production';
+    return new Promise(async (resolve, reject)=>{
+        dirName = dirName || process.argv[3];
 
-    const sourceDir = pkg.dirs.sourceDir;
-    const distDir = pkg.dirs.distDir;
-    const pageDir = `${sourceDir}/${dirName}`;
-    const entries = fs.pathExistsSync(pageDir);
+        if (!env) {
+            env = await selectEnv();
+        }
 
-    if (!entries) {
-        console.log(`-- ${pageDir} is empty! --`.red);
-    } else {
-        fs.removeSync(`${distDir}/${dirName}`);
+        process.env.NODE_ENV = env;
 
-        const webpackConfig = getProdConfig({name: dirName});
+        if (!dirName) {
+            console.error('-- source dir is empty! --');
+            // return
+            reject()
+        }
 
-        webpack(webpackConfig, (err, stats) => {
-            if (err) {
-                console.log(err);
-            }
-        })
-    }
+        const sourceDir = pkg.dirs.sourceDir;
+        const distDir = pkg.dirs.distDir;
+        const pageDir = `${sourceDir}/${dirName}`;
+        const entries = fs.pathExistsSync(pageDir);
 
+        if (!entries) {
+            console.log(`-- ${pageDir} is empty! --`.red);
+            reject()
+        } else {
+            fs.removeSync(`${distDir}/${dirName}`);
+
+            const webpackConfig = getProdConfig({name: dirName, isCDN});
+
+            webpack(webpackConfig, (err, stats) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                return resolve();
+            });
+
+        }
+    });
 }
 
 module.exports = build;

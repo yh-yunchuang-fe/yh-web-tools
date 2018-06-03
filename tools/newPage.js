@@ -43,8 +43,8 @@ async function newPage() {
     if (entries) {
         console.log(`${pageDir} is exist!`.red);
     } else {
-        // const { framework } = await getFramework(); //TODO
-        const framework = 'react';
+        const { framework } = await getFramework(); //TODO
+        // const framework = 'react';
 
         fs.ensureDirSync(pageDir);
         fs.copySync(`_commons/tpl/${framework}`, `${pageDir}`);

@@ -5,10 +5,9 @@
 const webpackMerge = require('webpack-merge');
 const getBaseConfig = require('./webpack.base.config');
 
-function getProdConfig({ name }) {
+function getProdConfig({ name, isCDN}) {
 
-    const htmlTemplate = `src/${name}/index.html`;
-    const webpackBaseConfig = getBaseConfig({ name });
+    const webpackBaseConfig = getBaseConfig({ name, isCDN });
 
     return webpackMerge(webpackBaseConfig, {
 
